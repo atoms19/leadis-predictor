@@ -24,34 +24,29 @@ class LDPredictor:
         
         # 1. Categorical Features
         self.categorical_features = [
-            'primary_language', 'schooling_type', 'gender'
+            'primary_language', 'schooling_type', 'gender',
+            'multilingualExposure', 'birthHistory', 'hearingStatus', 'visionStatus'
         ]
         
         # 2. Numerical Features
         self.numerical_features = [
             'age_months', 'multilingual_exposure', 
             'age_first_word_months', 'age_first_sentence_months',
-            'history_speech_therapy', 'history_motor_delay', 'vision_concerns', 
-            'hearing_concerns', 'family_learning_difficulty', 'family_adhd',
-            'mean_response_accuracy', 'response_accuracy_std', 'mean_response_time_ms',
-            'response_time_std_ms', 'instruction_repeat_count', 'guessing_rate',
-            'task_completion_rate', 'mean_focus_duration_sec', 'attention_dropoff_slope',
-            'random_interaction_rate', 'task_abandonment_count',
-            'immediate_recall_accuracy', 'delayed_recall_accuracy', 'max_sequence_length',
-            'sequence_order_error_rate', 'memory_omission_rate',
-            'shape_discrimination_accuracy', 'mirror_confusion_rate', 'visual_search_time_ms',
-            'pattern_completion_accuracy', 'visual_error_consistency',
-            'instruction_follow_accuracy', 'movement_initiation_latency_ms', 
-            'movement_smoothness_variance', 'left_right_confusion_rate', 
-            'bilateral_coordination_score',
-            'vocabulary_diversity', 'mean_utterance_length', 'speech_rate_wpm',
-            'pronunciation_error_rate', 'hesitation_frequency',
-            'reading_speed_wpm', 'word_skip_rate', 'line_regression_rate',
+            'history_speech_therapy', 'history_motor_delay', 
+            'vision_concerns', 'hearing_concerns', 
+            'family_learning_difficulty', 'family_adhd',
+            'mean_response_accuracy', 'response_accuracy_std', 
+            'mean_response_time_ms', 'response_time_std_ms',
+            'task_completion_rate', 'mean_focus_duration_sec', 
+            'attention_dropoff_slope', 'random_interaction_rate', 
+            'task_abandonment_count', 'max_sequence_length',
+            'sequence_order_error_rate', 'visual_search_time_ms',
+            'instruction_follow_accuracy', 'left_right_confusion_rate', 
+            'speech_rate_wpm', 'auditory_processing_accuracy',
+            'average_audio_replays', 'hesitation_frequency',
+            'reading_speed_wpm', 'reading_accuracy',
             'letter_reversal_rate', 'audio_text_mismatch_rate',
-            'pref_visual', 'pref_auditory', 'pref_kinesthetic',
-            'visual_vs_audio_accuracy_delta', 'audio_vs_text_latency_delta',
-            'motor_vs_visual_performance_gap', 'attention_vs_accuracy_correlation',
-            'intra_session_consistency_score'
+            'pref_visual', 'pref_auditory', 'attention_span_average'
         ]
 
     def _build_pipeline(self):
