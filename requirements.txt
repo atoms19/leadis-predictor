@@ -5,3 +5,5 @@ numpy
 flask
 flask-cors
 requests
+sqlalchemy
+psycopg2-binary

@@ -1,8 +1,7 @@
 from flask import Blueprint, request, jsonify
+from sqlalchemy.orm import Session
 from .database import get_db
-from .services.crud import CRUDService
-from .services.privacy import PrivacyService
-from .models.consent import ConsentType
+from .models.identity import QuizSession
 from model import LDPredictor
 import pandas as pd
 import os
@@ -10,7 +9,7 @@ import os
 # Create a Blueprint for the API routes
 api_bp = Blueprint('api', __name__)
 
-# Load model (reusing existing logic)
+# Load model
 MODEL_PATH = 'model.pkl'
 predictor = None
 
@@ -23,19 +22,53 @@ def load_model():
     else:
         print(f"Warning: Model file '{MODEL_PATH}' not found.")
 
-# Load model on import (or could be done in create_app)
+# Load model on import
 load_model()
 
 @api_bp.route('/health', methods=['GET'])
 def health_check():
     return jsonify({
         'status': 'healthy',
-        'model_loaded': predictor is not None,
-        'privacy_mode': 'enabled'
+        'model_loaded': predictor is not None
     })
+
+@api_bp.route('/session/create', methods=['POST'])
+def create_session():
+    """Create a new quiz session with hashed credential"""
+    try:
+        data = request.get_json()
+        if not data or 'credential' not in data:
+            return jsonify({'success': False, 'error': 'Credential required'}), 400
+        
+        credential = data['credential']
+        
+        db: Session = next(get_db())
+        
+        # Check if session already exists
+        existing_session = db.query(QuizSession).filter(QuizSession.credential == credential).first()
+        if existing_session:
+            return jsonify({
+                'success': True,
+                'message': 'Session already exists',
+                'has_data': existing_session.quiz_data is not None
+            })
+        
+        # Create new session with empty data
+        new_session = QuizSession(credential=credential, quiz_data=None)
+        db.add(new_session)
+        db.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Session created successfully'
+        }), 201
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 @api_bp.route('/predict', methods=['POST'])
 def predict():
+    """Process quiz data, make prediction, and save to database"""
     if predictor is None:
         return jsonify({'success': False, 'error': 'Model not loaded'}), 500
     
@@ -43,59 +76,67 @@ def predict():
         data = request.get_json()
         if not data:
             return jsonify({'success': False, 'error': 'No JSON data provided'}), 400
-
-        # --- Privacy & Identity Layer ---
-        db = next(get_db())
         
-        # Check for identity info (optional, for logged-in users)
-        # In a real app, this would come from a session or JWT
-        email = data.get('email')
-        user_id = None
+        # Extract credential
+        credential = data.get('credential')
+        if not credential:
+            return jsonify({'success': False, 'error': 'Credential required'}), 400
         
-        if email:
-            # Try to find existing user or create one (simplified for demo)
-            user = CRUDService.get_user_by_email(db, email)
-            if not user:
-                # If new user, we might need more info, or just create a placeholder
-                # For this demo, we'll assume we can create one if name is provided
-                if 'parent_name' in data:
-                    user = CRUDService.create_user(db, email, data.get('parent_name'), data.get('child_name', ''))
-            
-            if user:
-                user_id = user.id
-                
-                # Check Consent for Clinical Feedback if requested
-                # (Assuming the request implies consent if they are asking for it, 
-                # but strictly we should check if they have granted it before)
-                # For this implementation, we'll just log that we checked.
-                has_consent = CRUDService.check_consent(db, user_id, ConsentType.CLINICAL_FEEDBACK)
-                
-        # --- Prediction Layer ---
-        # Prepare data for model (remove non-features)
-        # We use the privacy service to clean it first, which is also good for the model
-        # but we might need to be careful not to remove features the model needs if they look like PII.
-        # The current anonymize_data is safe for the features we know about.
-        clean_data = PrivacyService.anonymize_data(data)
+        # Extract quiz features (remove credential for prediction)
+        quiz_features = {k: v for k, v in data.items() if k != 'credential'}
         
-        # Create DataFrame
-        df = pd.DataFrame([clean_data])
+        # Create DataFrame for prediction
+        df = pd.DataFrame([quiz_features])
         
-        # Predict
+        # Make prediction
         predictions = predictor.predict(df)
         result = predictions[0]
         
-        # --- Storage Layer ---
-        # Store the assessment securely
-        # If we have a user_id, it will be hashed. If not, we generate a random hash or skip linking.
-        storage_user_id = user_id if user_id else "anonymous"
+        # Prepare complete data to save (quiz features + prediction)
+        complete_data = {
+            'features': quiz_features,
+            'prediction': result
+        }
         
-        CRUDService.create_assessment(db, storage_user_id, clean_data, result)
+        # Save to database
+        db: Session = next(get_db())
+        session = db.query(QuizSession).filter(QuizSession.credential == credential).first()
+        
+        if not session:
+            # Create session if it doesn't exist
+            session = QuizSession(credential=credential, quiz_data=complete_data)
+            db.add(session)
+        else:
+            # Update existing session
+            session.quiz_data = complete_data
+        
+        db.commit()
         
         return jsonify({
             'success': True,
-            'prediction': result,
-            'privacy_notice': 'Data stored with privacy preservation.'
+            'prediction': result
         })
+        
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
 
+@api_bp.route('/session/<credential>', methods=['GET'])
+def get_session(credential):
+    """Retrieve quiz session data by credential"""
+    try:
+        db: Session = next(get_db())
+        session = db.query(QuizSession).filter(QuizSession.credential == credential).first()
+        
+        if not session:
+            return jsonify({'success': False, 'error': 'Session not found'}), 404
+        
+        return jsonify({
+            'success': True,
+            'credential': session.credential,
+            'quiz_data': session.quiz_data,
+            'created_at': session.created_at.isoformat(),
+            'updated_at': session.updated_at.isoformat()
+        })
+        
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
