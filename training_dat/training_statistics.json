@@ -2,65 +2,58 @@
   "total_samples": 2000,
   "risk_distributions": {
     "risk_reading": {
-      "mean": 0.3416,
+      "mean": 0.3375,
       "min": 0,
-      "max": 0.9574,
-      "high_risk_count": 479,
-      "low_risk_count": 1005
+      "max": 0.9716,
+      "high_risk_count": 454,
+      "low_risk_count": 1007
     },
     "risk_writing": {
-      "mean": 0.3311,
+      "mean": 0.3251,
       "min": 0,
-      "max": 0.9078,
-      "high_risk_count": 428,
-      "low_risk_count": 983
+      "max": 0.8751,
+      "high_risk_count": 403,
+      "low_risk_count": 1001
     },
     "risk_attention": {
-      "mean": 0.298,
+      "mean": 0.2918,
       "min": 0,
       "max": 1,
-      "high_risk_count": 377,
-      "low_risk_count": 1270
+      "high_risk_count": 347,
+      "low_risk_count": 1275
     },
     "risk_working_memory": {
-      "mean": 0.3321,
+      "mean": 0.3276,
       "min": 0,
-      "max": 0.826,
-      "high_risk_count": 460,
-      "low_risk_count": 944
-    },
-    "risk_expressive_language": {
-      "mean": 0.2825,
-      "min": 0,
-      "max": 0.9453,
-      "high_risk_count": 304,
-      "low_risk_count": 1235
+      "max": 0.8122,
+      "high_risk_count": 439,
+      "low_risk_count": 974
     },
     "risk_receptive_language": {
-      "mean": 0.2705,
+      "mean": 0.2742,
       "min": 0,
-      "max": 0.8912,
-      "high_risk_count": 278,
-      "low_risk_count": 1283
+      "max": 0.8936,
+      "high_risk_count": 285,
+      "low_risk_count": 1253
     },
     "risk_visual_processing": {
-      "mean": 0.2368,
+      "mean": 0.2345,
       "min": 0,
-      "max": 0.6693,
-      "high_risk_count": 109,
-      "low_risk_count": 1369
+      "max": 0.6892,
+      "high_risk_count": 99,
+      "low_risk_count": 1420
     },
     "risk_motor_coordination": {
-      "mean": 0.2108,
-      "min": 0,
-      "max": 0.6066,
-      "high_risk_count": 38,
-      "low_risk_count": 1551
+      "mean": 0.209,
+      "min": 0.0,
+      "max": 0.6005,
+      "high_risk_count": 52,
+      "low_risk_count": 1556
     }
   },
   "feature_ranges": {},
   "age_distribution": {
-    "mean_months": 83.0,
+    "mean_months": 84.0,
     "min_months": 36,
     "max_months": 144
   }

@@ -90,12 +90,12 @@
     {
       "attribute": "history_speech_therapy",
       "dataType": "numerical",
-      "valueMap": { "0": 0, "1": 1, "2": 2, "3": 3 }
+      "valueRange": { "min": 0, "max": 3 }
     },
     {
       "attribute": "history_motor_delay",
       "dataType": "numerical",
-      "valueMap": { "0": 0, "1": 1, "2": 2, "3": 3, "4": 4 }
+      "valueRange": { "min": 0, "max": 4 }
     },
     {
       "attribute": "vision_concerns",
@@ -115,13 +115,7 @@
     {
       "attribute": "family_adhd",
       "dataType": "numerical",
-      "valueMap": {
-        "no-history": 0,
-        "one-parent": 1,
-        "both-parents": 2,
-        "siblings": 3,
-        "unsure": 4
-      }
+      "valueRange": { "min": 0, "max": 4 }
     },
     {
       "attribute": "mean_response_accuracy",
@@ -149,39 +143,9 @@
       "valueRange": { "min": 0.0, "max": 1.0 }
     },
     {
-      "attribute": "mean_focus_duration_sec",
-      "dataType": "numerical",
-      "valueRange": { "min": 0, "max": 600 }
-    },
-    {
-      "attribute": "attention_dropoff_slope",
-      "dataType": "numerical",
-      "valueRange": { "min": -1.0, "max": 1.0 }
-    },
-    {
-      "attribute": "random_interaction_rate",
-      "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
-    },
-    {
       "attribute": "task_abandonment_count",
       "dataType": "numerical",
       "valueRange": { "min": 0, "max": 50 }
-    },
-    {
-      "attribute": "max_sequence_length",
-      "dataType": "numerical",
-      "valueRange": { "min": 0, "max": 20 }
-    },
-    {
-      "attribute": "sequence_order_error_rate",
-      "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
-    },
-    {
-      "attribute": "visual_search_time_ms",
-      "dataType": "numerical",
-      "valueRange": { "min": 0, "max": 30000 }
     },
     {
       "attribute": "instruction_follow_accuracy",
@@ -189,14 +153,29 @@
       "valueRange": { "min": 0.0, "max": 1.0 }
     },
     {
-      "attribute": "left_right_confusion_rate",
+      "attribute": "mean_focus_duration_sec",
+      "dataType": "numerical",
+      "valueRange": { "min": 0, "max": 600 }
+    },
+    {
+      "attribute": "attention_span_average",
+      "dataType": "numerical",
+      "valueRange": { "min": 0, "max": 600 }
+    },
+    {
+      "attribute": "random_interaction_rate",
       "dataType": "numerical",
       "valueRange": { "min": 0.0, "max": 1.0 }
     },
     {
-      "attribute": "speech_rate_wpm",
+      "attribute": "max_sequence_length",
       "dataType": "numerical",
-      "valueRange": { "min": 0, "max": 200 }
+      "valueRange": { "min": 0, "max": 20 }
+    },
+    {
+      "attribute": "visual_search_time_ms",
+      "dataType": "numerical",
+      "valueRange": { "min": 0, "max": 30000 }
     },
     {
       "attribute": "auditory_processing_accuracy",
@@ -209,86 +188,71 @@
       "valueRange": { "min": 0, "max": 10 }
     },
     {
-      "attribute": "hesitation_frequency",
-      "dataType": "numerical",
-      "valueRange": { "min": 0, "max": 50 }
-    },
-    {
-      "attribute": "reading_speed_wpm",
-      "dataType": "numerical",
-      "valueRange": { "min": 0, "max": 300 }
-    },
-    {
-      "attribute": "reading_accuracy",
-      "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
-    },
-    {
-      "attribute": "letter_reversal_rate",
-      "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
-    },
-    {
-      "attribute": "audio_text_mismatch_rate",
-      "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
-    },
-    {
-      "attribute": "pref_visual",
-      "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
-    },
-    {
       "attribute": "pref_auditory",
       "dataType": "numerical",
       "valueRange": { "min": 0.0, "max": 1.0 }
     },
     {
-      "attribute": "attention_span_average",
+      "attribute": "hand_laterality_accuracy",
       "dataType": "numerical",
-      "valueRange": { "min": 0, "max": 600 }
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Accuracy in identifying and using correct hand (left vs right)"
+    },
+    {
+      "attribute": "finger_counting_accuracy",
+      "dataType": "numerical",
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Accuracy in showing specific number of fingers on command"
+    },
+    {
+      "attribute": "hand_position_accuracy",
+      "dataType": "numerical",
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Accuracy in positioning hands in specified locations"
     }
   ],
   "output_targets": [
     {
       "attribute": "risk_reading",
       "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Risk of reading difficulties (dyslexia)"
     },
     {
       "attribute": "risk_writing",
       "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Risk of writing difficulties (dysgraphia)"
     },
     {
       "attribute": "risk_attention",
       "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Risk of attention disorders (ADHD)"
     },
     {
       "attribute": "risk_working_memory",
       "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
-    },
-    {
-      "attribute": "risk_expressive_language",
-      "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Risk of working memory deficits"
     },
     {
       "attribute": "risk_receptive_language",
       "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Risk of receptive language difficulties"
     },
     {
       "attribute": "risk_visual_processing",
       "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Risk of visual processing disorders"
     },
     {
       "attribute": "risk_motor_coordination",
       "dataType": "numerical",
-      "valueRange": { "min": 0.0, "max": 1.0 }
+      "valueRange": { "min": 0.0, "max": 1.0 },
+      "description": "Risk of motor coordination difficulties (dyspraxia)"
     }
   ]
 }

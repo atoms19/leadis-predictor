@@ -73,23 +73,16 @@ def predict():
         "task_abandonment_count": 2,
         "instruction_follow_accuracy": 0.88,
         "mean_focus_duration_sec": 180,
-        "attention_dropoff_slope": -0.1,
         "attention_span_average": 200,
         "random_interaction_rate": 0.05,
         "max_sequence_length": 6,
-        "sequence_order_error_rate": 0.15,
         "visual_search_time_ms": 3000,
-        "left_right_confusion_rate": 0.10,
-        "pref_visual": 0.6,
         "auditory_processing_accuracy": 0.85,
         "average_audio_replays": 1,
         "pref_auditory": 0.4,
-        "speech_rate_wpm": 100,
-        "hesitation_frequency": 5,
-        "reading_speed_wpm": 80,
-        "reading_accuracy": 0.85,
-        "letter_reversal_rate": 0.08,
-        "audio_text_mismatch_rate": 0.05
+        "hand_laterality_accuracy": 0.90,
+        "finger_counting_accuracy": 0.95,
+        "hand_position_accuracy": 0.88
     }
     
     Returns:

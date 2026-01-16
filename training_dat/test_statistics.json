@@ -2,65 +2,58 @@
   "total_samples": 500,
   "risk_distributions": {
     "risk_reading": {
-      "mean": 0.3458,
+      "mean": 0.3327,
       "min": 0,
-      "max": 0.9272,
-      "high_risk_count": 127,
-      "low_risk_count": 259
-    },
-    "risk_writing": {
-      "mean": 0.3379,
-      "min": 0,
-      "max": 0.8448,
-      "high_risk_count": 119,
+      "max": 0.9578,
+      "high_risk_count": 117,
       "low_risk_count": 256
     },
+    "risk_writing": {
+      "mean": 0.3202,
+      "min": 0,
+      "max": 0.8101,
+      "high_risk_count": 110,
+      "low_risk_count": 258
+    },
     "risk_attention": {
-      "mean": 0.3007,
+      "mean": 0.3023,
       "min": 0,
       "max": 1,
-      "high_risk_count": 101,
+      "high_risk_count": 103,
       "low_risk_count": 324
     },
     "risk_working_memory": {
-      "mean": 0.335,
+      "mean": 0.3307,
       "min": 0,
-      "max": 0.8088,
-      "high_risk_count": 125,
-      "low_risk_count": 242
-    },
-    "risk_expressive_language": {
-      "mean": 0.2779,
-      "min": 0,
-      "max": 0.8645,
-      "high_risk_count": 66,
-      "low_risk_count": 322
+      "max": 0.7882,
+      "high_risk_count": 134,
+      "low_risk_count": 249
     },
     "risk_receptive_language": {
-      "mean": 0.2643,
+      "mean": 0.2737,
       "min": 0,
-      "max": 0.8246,
-      "high_risk_count": 58,
-      "low_risk_count": 329
+      "max": 0.8451,
+      "high_risk_count": 70,
+      "low_risk_count": 322
     },
     "risk_visual_processing": {
-      "mean": 0.2427,
+      "mean": 0.231,
       "min": 0,
-      "max": 0.6719,
-      "high_risk_count": 29,
-      "low_risk_count": 337
+      "max": 0.664,
+      "high_risk_count": 34,
+      "low_risk_count": 355
     },
     "risk_motor_coordination": {
-      "mean": 0.2142,
+      "mean": 0.2057,
       "min": 0,
-      "max": 0.6232,
-      "high_risk_count": 9,
-      "low_risk_count": 390
+      "max": 0.6017,
+      "high_risk_count": 12,
+      "low_risk_count": 392
     }
   },
   "feature_ranges": {},
   "age_distribution": {
-    "mean_months": 84.3,
+    "mean_months": 82.3,
     "min_months": 36,
     "max_months": 144
   }

@@ -81,36 +81,32 @@ The model organizes features into 12 categories from user-schema.json:
 6. **Task Performance** (2 components)
    - Task completion, abandonment, instruction following
    
-7. **Attention Metrics** (3 components)
-   - Focus duration, attention span, dropoff patterns
+7. **Attention Metrics** (2 components)
+   - Focus duration, attention span, random interactions
    
-8. **Memory Metrics** (2 components)
-   - Sequence recall and error rates
+8. **Memory Metrics** (1 component)
+   - Maximum sequence recall length
    
-9. **Visual Processing** (2 components)
-   - Visual search time, spatial confusion, preferences
+9. **Visual Processing** (1 component)
+   - Visual search time
    
 10. **Auditory Processing** (2 components)
     - Auditory accuracy, replays, preferences
     
-11. **Speech Metrics** (2 components)
-    - Speech rate and hesitation patterns
-    
-12. **Reading Metrics** (3 components)
-    - Reading speed, accuracy, reversal rates
+11. **Motor Coordination** (2 components)
+    - Hand laterality, finger counting, hand positioning
 
 ### Output Predictions
 
-The model predicts risk scores (0-1 range) for 8 learning disability categories:
+The model predicts risk scores (0-1 range) for 7 learning disability categories:
 
 1. **risk_reading** - Risk of reading difficulties (dyslexia)
 2. **risk_writing** - Risk of writing difficulties (dysgraphia)
 3. **risk_attention** - Risk of attention disorders (ADHD-like symptoms)
 4. **risk_working_memory** - Risk of working memory deficits
-5. **risk_expressive_language** - Risk of expressive language difficulties
-6. **risk_receptive_language** - Risk of receptive language difficulties
-7. **risk_visual_processing** - Risk of visual processing disorders
-8. **risk_motor_coordination** - Risk of motor coordination difficulties (dyspraxia)
+5. **risk_receptive_language** - Risk of receptive language difficulties
+6. **risk_visual_processing** - Risk of visual processing disorders
+7. **risk_motor_coordination** - Risk of motor coordination difficulties (dyspraxia)
 
 ### Why PCA + Gradient Boosting?
 
@@ -142,9 +138,9 @@ The model predicts risk scores (0-1 range) for 8 learning disability categories:
    - Applied separately to each of the 12 feature categories
    - Number of components per category (configurable):
      - Demographic: 3, Developmental: 4, Sensory: 2, Family: 2
-     - Response: 3, Task: 2, Attention: 3, Memory: 2
-     - Visual: 2, Auditory: 2, Speech: 2, Reading: 3
-   - Total components: ~30 (down from 50+ original features)
+     - Response: 3, Task: 2, Attention: 2, Memory: 1
+     - Visual: 1, Auditory: 2, Motor: 2
+   - Total components: ~24 (down from 35+ original features)
    - Preserves 85-95% of variance in each category
 
 4. **Model Training**
@@ -369,23 +365,16 @@ curl -X POST http://localhost:5000/predict \
     "task_abandonment_count": 2,
     "instruction_follow_accuracy": 0.88,
     "mean_focus_duration_sec": 180,
-    "attention_dropoff_slope": -0.1,
     "attention_span_average": 200,
     "random_interaction_rate": 0.05,
     "max_sequence_length": 6,
-    "sequence_order_error_rate": 0.15,
     "visual_search_time_ms": 3000,
-    "left_right_confusion_rate": 0.10,
-    "pref_visual": 0.6,
     "auditory_processing_accuracy": 0.85,
     "average_audio_replays": 1,
     "pref_auditory": 0.4,
-    "speech_rate_wpm": 100,
-    "hesitation_frequency": 5,
-    "reading_speed_wpm": 80,
-    "reading_accuracy": 0.85,
-    "letter_reversal_rate": 0.08,
-    "audio_text_mismatch_rate": 0.05
+    "hand_laterality_accuracy": 0.90,
+    "finger_counting_accuracy": 0.95,
+    "hand_position_accuracy": 0.88
   }'
 ```
 
@@ -400,7 +389,6 @@ curl -X POST http://localhost:5000/predict \
       "risk_writing": 0.2345,
       "risk_attention": 0.1567,
       "risk_working_memory": 0.2890,
-      "risk_expressive_language": 0.1789,
       "risk_receptive_language": 0.1456,
       "risk_visual_processing": 0.2123,
       "risk_motor_coordination": 0.1678
@@ -507,7 +495,7 @@ See [field-mapping.json](field-mapping.json) for complete feature documentation 
 - Value ranges and encodings
 - Feature descriptions
 
-### Required Features (42 total)
+### Required Features (35 total)
 
 **Categorical Features (7):**
 - `primary_language` - Primary language (0=english)
@@ -518,12 +506,12 @@ See [field-mapping.json](field-mapping.json) for complete feature documentation 
 - `hearingStatus` - Hearing status (0-3)
 - `visionStatus` - Vision status (0-3)
 
-**Numerical Features (35):**
+**Numerical Features (28):**
 - Demographics: `age_months`, `multilingual_exposure`
 - Developmental: `age_first_word_months`, `age_first_sentence_months`, `history_speech_therapy`, `history_motor_delay`
 - Sensory: `hearing_concerns`, `vision_concerns`
 - Family: `family_learning_difficulty`, `family_adhd`
-- Assessment metrics: Response, task, attention, memory, visual, auditory, speech, and reading metrics
+- Assessment metrics: Response, task, attention, memory, visual, auditory, and motor coordination metrics
 
 ---
 
@@ -541,10 +529,9 @@ All risk scores range from 0.0 to 1.0:
 2. **risk_writing** - Writing difficulties (dysgraphia)
 3. **risk_attention** - Attention disorders (ADHD)
 4. **risk_working_memory** - Working memory deficits
-5. **risk_expressive_language** - Expressive language difficulties
-6. **risk_receptive_language** - Receptive language difficulties
-7. **risk_visual_processing** - Visual processing disorders
-8. **risk_motor_coordination** - Motor coordination difficulties (dyspraxia)
+5. **risk_receptive_language** - Receptive language difficulties
+6. **risk_visual_processing** - Visual processing disorders
+7. **risk_motor_coordination** - Motor coordination difficulties (dyspraxia)
 
 ---
 
@@ -606,7 +593,7 @@ Expected metrics (on synthetic data):
 ## ⚠️ Important Notes
 
 1. **This is a screening tool, not a diagnostic tool** - Risk scores indicate probability, not certainty
-2. **Requires all 42 features** - Missing features will cause prediction errors
+2. **Requires all 35 features** - Missing features will cause prediction errors
 3. **Categorical features must be encoded** - Use numeric values (0, 1, 2, etc.) as defined in field-mapping.json
 4. **Model must be trained first** - Run `train.py` before starting the API server
 

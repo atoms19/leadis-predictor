@@ -16,9 +16,8 @@ def load_training_data(data_folder='training_dat'):
     # Define required targets to validate data
     required_targets = [
         'risk_reading', 'risk_writing', 'risk_attention', 
-        'risk_working_memory', 'risk_expressive_language', 
-        'risk_receptive_language', 'risk_visual_processing', 
-        'risk_motor_coordination'
+        'risk_working_memory', 'risk_receptive_language', 
+        'risk_visual_processing', 'risk_motor_coordination'
     ]
 
     df_list = []

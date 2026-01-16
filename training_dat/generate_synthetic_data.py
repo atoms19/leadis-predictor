@@ -125,7 +125,6 @@ def get_base_risks(profile_type: str) -> Dict[str, float]:
             "writing": random.uniform(0.05, 0.25),
             "attention": random.uniform(0.05, 0.20),
             "working_memory": random.uniform(0.05, 0.25),
-            "expressive_language": random.uniform(0.05, 0.20),
             "receptive_language": random.uniform(0.05, 0.20),
             "visual_processing": random.uniform(0.05, 0.20),
             "motor_coordination": random.uniform(0.05, 0.20)
@@ -137,7 +136,6 @@ def get_base_risks(profile_type: str) -> Dict[str, float]:
             "writing": random.uniform(0.45, 0.75),  # Often comorbid
             "attention": random.uniform(0.15, 0.40),
             "working_memory": random.uniform(0.35, 0.60),
-            "expressive_language": random.uniform(0.20, 0.45),
             "receptive_language": random.uniform(0.15, 0.35),
             "visual_processing": random.uniform(0.30, 0.55),
             "motor_coordination": random.uniform(0.10, 0.30)
@@ -149,7 +147,6 @@ def get_base_risks(profile_type: str) -> Dict[str, float]:
             "writing": random.uniform(0.25, 0.50),
             "attention": random.uniform(0.60, 0.90),
             "working_memory": random.uniform(0.45, 0.70),
-            "expressive_language": random.uniform(0.15, 0.35),
             "receptive_language": random.uniform(0.20, 0.40),
             "visual_processing": random.uniform(0.15, 0.35),
             "motor_coordination": random.uniform(0.20, 0.45)
@@ -161,7 +158,6 @@ def get_base_risks(profile_type: str) -> Dict[str, float]:
             "writing": random.uniform(0.25, 0.50),
             "attention": random.uniform(0.15, 0.35),
             "working_memory": random.uniform(0.25, 0.45),
-            "expressive_language": random.uniform(0.55, 0.85),
             "receptive_language": random.uniform(0.50, 0.80),
             "visual_processing": random.uniform(0.10, 0.30),
             "motor_coordination": random.uniform(0.10, 0.25)
@@ -173,7 +169,6 @@ def get_base_risks(profile_type: str) -> Dict[str, float]:
             "writing": random.uniform(0.50, 0.80),
             "attention": random.uniform(0.45, 0.75),
             "working_memory": random.uniform(0.50, 0.75),
-            "expressive_language": random.uniform(0.40, 0.70),
             "receptive_language": random.uniform(0.40, 0.65),
             "visual_processing": random.uniform(0.35, 0.60),
             "motor_coordination": random.uniform(0.30, 0.55)
@@ -185,7 +180,6 @@ def get_base_risks(profile_type: str) -> Dict[str, float]:
             "writing": random.uniform(0.30, 0.50),
             "attention": random.uniform(0.25, 0.45),
             "working_memory": random.uniform(0.30, 0.50),
-            "expressive_language": random.uniform(0.25, 0.45),
             "receptive_language": random.uniform(0.25, 0.45),
             "visual_processing": random.uniform(0.20, 0.40),
             "motor_coordination": random.uniform(0.20, 0.40)
@@ -239,7 +233,7 @@ def generate_developmental_history(base_risks: Dict[str, float]) -> Dict[str, An
         birth = weighted_choice([0, 1, 2, 3, 4], [0.80, 0.10, 0.04, 0.03, 0.03])
     
     # Age of first words (typical: 12 months, delayed: 18-24+ months)
-    language_risk = (base_risks["expressive_language"] + base_risks["receptive_language"]) / 2
+    language_risk = base_risks["receptive_language"]
     first_word_base = 12 + language_risk * 20
     age_first_word = int(clamp(random.gauss(first_word_base, 4), 6, 48))
     
@@ -320,7 +314,6 @@ def generate_task_performance(base_risks: Dict[str, float]) -> Dict[str, Any]:
     reading_risk = base_risks["reading"]
     attention_risk = base_risks["attention"]
     memory_risk = base_risks["working_memory"]
-    language_exp_risk = base_risks["expressive_language"]
     language_rec_risk = base_risks["receptive_language"]
     visual_risk = base_risks["visual_processing"]
     motor_risk = base_risks["motor_coordination"]
@@ -342,9 +335,6 @@ def generate_task_performance(base_risks: Dict[str, float]) -> Dict[str, Any]:
     focus_base = 180 - attention_risk * 120
     mean_focus = clamp(random.gauss(focus_base, 30), 15, 300)
     
-    # Attention dropoff slope (negative = declining attention)
-    dropoff = clamp(-attention_risk * 0.5 + random.gauss(0, 0.15), -0.8, 0.3)
-    
     # Random interaction rate (impulsivity indicator)
     random_rate = clamp(attention_risk * 0.4 + random.gauss(0.1, 0.08), 0, 0.6)
     
@@ -353,7 +343,6 @@ def generate_task_performance(base_risks: Dict[str, float]) -> Dict[str, Any]:
     
     # Sequence/memory tasks
     max_sequence = int(clamp(7 - memory_risk * 4 - attention_risk * 2 + random.gauss(0, 1), 2, 12))
-    sequence_errors = clamp(memory_risk * 0.5 + attention_risk * 0.2 + random.gauss(0.1, 0.08), 0, 0.8)
     
     # Visual search
     visual_search = clamp(2000 + visual_risk * 8000 + attention_risk * 5000 + random.gauss(0, 1000), 500, 25000)
@@ -361,36 +350,20 @@ def generate_task_performance(base_risks: Dict[str, float]) -> Dict[str, Any]:
     # Instruction following
     instruction_acc = clamp(1 - language_rec_risk * 0.5 - attention_risk * 0.3 + random.gauss(0, 0.1), 0.2, 1.0)
     
-    # Left-right confusion (common in dyslexia)
-    lr_confusion = clamp(reading_risk * 0.4 + visual_risk * 0.2 + random.gauss(0.05, 0.08), 0, 0.7)
-    
-    # Speech rate
-    speech_rate = clamp(120 - language_exp_risk * 50 + random.gauss(0, 15), 40, 180)
-    
     # Auditory processing
     auditory_acc = clamp(1 - language_rec_risk * 0.4 - attention_risk * 0.2 + random.gauss(0, 0.1), 0.3, 1.0)
     audio_replays = int(clamp(language_rec_risk * 5 + attention_risk * 2 + random.gauss(0, 1), 0, 8))
     
-    # Hesitation frequency
-    hesitation = int(clamp(language_exp_risk * 25 + reading_risk * 15 + random.gauss(5, 5), 0, 45))
-    
-    # Reading metrics
-    reading_speed = clamp(150 - reading_risk * 100 + random.gauss(0, 20), 20, 250)
-    reading_acc = clamp(1 - reading_risk * 0.5 + random.gauss(0, 0.1), 0.3, 1.0)
-    letter_reversal = clamp(reading_risk * 0.5 + visual_risk * 0.2 + random.gauss(0.05, 0.08), 0, 0.7)
-    audio_text_mismatch = clamp(reading_risk * 0.4 + language_rec_risk * 0.2 + random.gauss(0.05, 0.08), 0, 0.6)
-    
-    # Learning preferences
-    pref_visual = clamp(0.5 + visual_risk * -0.2 + random.gauss(0, 0.15), 0.1, 0.9)
+    # Learning preference - auditory
     pref_auditory = clamp(0.5 + language_rec_risk * -0.2 + random.gauss(0, 0.15), 0.1, 0.9)
-    
-    # Normalize preferences
-    total_pref = pref_visual + pref_auditory
-    pref_visual = pref_visual / total_pref
-    pref_auditory = pref_auditory / total_pref
     
     # Attention span average
     attention_span = clamp(180 - attention_risk * 120 + random.gauss(0, 30), 20, 400)
+    
+    # Motor coordination metrics (NEW)
+    hand_laterality = clamp(1 - motor_risk * 0.5 - visual_risk * 0.2 + random.gauss(0, 0.1), 0.3, 1.0)
+    finger_counting = clamp(1 - motor_risk * 0.4 - memory_risk * 0.2 + random.gauss(0, 0.1), 0.4, 1.0)
+    hand_position = clamp(1 - motor_risk * 0.6 - visual_risk * 0.15 + random.gauss(0, 0.1), 0.3, 1.0)
     
     return {
         "mean_response_accuracy": round(mean_accuracy, 4),
@@ -399,25 +372,18 @@ def generate_task_performance(base_risks: Dict[str, float]) -> Dict[str, Any]:
         "response_time_std_ms": round(rt_std, 2),
         "task_completion_rate": round(completion, 4),
         "mean_focus_duration_sec": round(mean_focus, 2),
-        "attention_dropoff_slope": round(dropoff, 4),
         "random_interaction_rate": round(random_rate, 4),
         "task_abandonment_count": abandonment,
         "max_sequence_length": max_sequence,
-        "sequence_order_error_rate": round(sequence_errors, 4),
         "visual_search_time_ms": round(visual_search, 2),
         "instruction_follow_accuracy": round(instruction_acc, 4),
-        "left_right_confusion_rate": round(lr_confusion, 4),
-        "speech_rate_wpm": round(speech_rate, 2),
         "auditory_processing_accuracy": round(auditory_acc, 4),
         "average_audio_replays": audio_replays,
-        "hesitation_frequency": hesitation,
-        "reading_speed_wpm": round(reading_speed, 2),
-        "reading_accuracy": round(reading_acc, 4),
-        "letter_reversal_rate": round(letter_reversal, 4),
-        "audio_text_mismatch_rate": round(audio_text_mismatch, 4),
-        "pref_visual": round(pref_visual, 4),
         "pref_auditory": round(pref_auditory, 4),
-        "attention_span_average": round(attention_span, 2)
+        "attention_span_average": round(attention_span, 2),
+        "hand_laterality_accuracy": round(hand_laterality, 4),
+        "finger_counting_accuracy": round(finger_counting, 4),
+        "hand_position_accuracy": round(hand_position, 4)
     }
 
 def calculate_risk_scores(profile: Dict[str, Any], base_risks: Dict[str, float]) -> Dict[str, float]:
@@ -429,7 +395,6 @@ def calculate_risk_scores(profile: Dict[str, Any], base_risks: Dict[str, float])
         "risk_writing": round(clamp(base_risks["writing"] + random.gauss(0, 0.05), 0, 1), 4),
         "risk_attention": round(clamp(base_risks["attention"] + random.gauss(0, 0.05), 0, 1), 4),
         "risk_working_memory": round(clamp(base_risks["working_memory"] + random.gauss(0, 0.05), 0, 1), 4),
-        "risk_expressive_language": round(clamp(base_risks["expressive_language"] + random.gauss(0, 0.05), 0, 1), 4),
         "risk_receptive_language": round(clamp(base_risks["receptive_language"] + random.gauss(0, 0.05), 0, 1), 4),
         "risk_visual_processing": round(clamp(base_risks["visual_processing"] + random.gauss(0, 0.05), 0, 1), 4),
         "risk_motor_coordination": round(clamp(base_risks["motor_coordination"] + random.gauss(0, 0.05), 0, 1), 4)
@@ -479,31 +444,23 @@ def get_feature_order() -> List[str]:
         "response_time_std_ms",
         "task_completion_rate",
         "mean_focus_duration_sec",
-        "attention_dropoff_slope",
         "random_interaction_rate",
         "task_abandonment_count",
         "max_sequence_length",
-        "sequence_order_error_rate",
         "visual_search_time_ms",
         "instruction_follow_accuracy",
-        "left_right_confusion_rate",
-        "speech_rate_wpm",
         "auditory_processing_accuracy",
         "average_audio_replays",
-        "hesitation_frequency",
-        "reading_speed_wpm",
-        "reading_accuracy",
-        "letter_reversal_rate",
-        "audio_text_mismatch_rate",
-        "pref_visual",
         "pref_auditory",
         "attention_span_average",
+        "hand_laterality_accuracy",
+        "finger_counting_accuracy",
+        "hand_position_accuracy",
         # Output targets
         "risk_reading",
         "risk_writing",
         "risk_attention",
         "risk_working_memory",
-        "risk_expressive_language",
         "risk_receptive_language",
         "risk_visual_processing",
         "risk_motor_coordination"
@@ -538,8 +495,7 @@ def generate_statistics(dataset: List[Dict[str, Any]]) -> Dict[str, Any]:
     # Risk score distributions
     risk_fields = [
         "risk_reading", "risk_writing", "risk_attention", "risk_working_memory",
-        "risk_expressive_language", "risk_receptive_language", 
-        "risk_visual_processing", "risk_motor_coordination"
+        "risk_receptive_language", "risk_visual_processing", "risk_motor_coordination"
     ]
     
     for field in risk_fields:

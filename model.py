@@ -22,20 +22,18 @@ class LDPredictor:
             'family': 2,
             'response': 3,
             'task': 2,
-            'attention': 3,
-            'memory': 2,
-            'visual': 2,
+            'attention': 2,
+            'memory': 1,
+            'visual': 1,
             'auditory': 2,
-            'speech': 2,
-            'reading': 3
+            'motor': 2
         }
         
         # Targets
         self.target_columns = [
             'risk_reading', 'risk_writing', 'risk_attention', 
-            'risk_working_memory', 'risk_expressive_language', 
-            'risk_receptive_language', 'risk_visual_processing', 
-            'risk_motor_coordination'
+            'risk_working_memory', 'risk_receptive_language', 
+            'risk_visual_processing', 'risk_motor_coordination'
         ]
         
         # Feature groups based on user-schema.json categories
@@ -73,18 +71,18 @@ class LDPredictor:
         
         # 7. Assessment Metrics - Attention Metrics
         self.attention_numerical = [
-            'mean_focus_duration_sec', 'attention_dropoff_slope',
-            'attention_span_average', 'random_interaction_rate'
+            'mean_focus_duration_sec', 'attention_span_average',
+            'random_interaction_rate'
         ]
         
         # 8. Assessment Metrics - Memory Metrics
         self.memory_numerical = [
-            'max_sequence_length', 'sequence_order_error_rate'
+            'max_sequence_length'
         ]
         
         # 9. Assessment Metrics - Visual Processing
         self.visual_numerical = [
-            'visual_search_time_ms', 'left_right_confusion_rate', 'pref_visual'
+            'visual_search_time_ms'
         ]
         
         # 10. Assessment Metrics - Auditory Processing
@@ -92,13 +90,10 @@ class LDPredictor:
             'auditory_processing_accuracy', 'average_audio_replays', 'pref_auditory'
         ]
         
-        # 11. Assessment Metrics - Speech Metrics
-        self.speech_numerical = ['speech_rate_wpm', 'hesitation_frequency']
-        
-        # 12. Assessment Metrics - Reading Metrics
-        self.reading_numerical = [
-            'reading_speed_wpm', 'reading_accuracy',
-            'letter_reversal_rate', 'audio_text_mismatch_rate'
+        # 11. Assessment Metrics - Motor Coordination
+        self.motor_numerical = [
+            'hand_laterality_accuracy', 'finger_counting_accuracy',
+            'hand_position_accuracy'
         ]
         
         # All categorical and numerical features
@@ -113,7 +108,7 @@ class LDPredictor:
             self.response_numerical + self.task_numerical +
             self.attention_numerical + self.memory_numerical +
             self.visual_numerical + self.auditory_numerical +
-            self.speech_numerical + self.reading_numerical
+            self.motor_numerical
         )
 
     def _build_preprocessing_pipeline(self):
@@ -219,13 +214,8 @@ class LDPredictor:
                 'cat_start': 0,
                 'cat_count': 0
             },
-            'speech': {
-                'num_indices': [i for i, f in enumerate(self.numerical_features) if f in self.speech_numerical],
-                'cat_start': 0,
-                'cat_count': 0
-            },
-            'reading': {
-                'num_indices': [i for i, f in enumerate(self.numerical_features) if f in self.reading_numerical],
+            'motor': {
+                'num_indices': [i for i, f in enumerate(self.numerical_features) if f in self.motor_numerical],
                 'cat_start': 0,
                 'cat_count': 0
             }

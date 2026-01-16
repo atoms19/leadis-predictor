@@ -79,33 +79,24 @@ def test_single_prediction():
         
         # Attention
         "mean_focus_duration_sec": 180,
-        "attention_dropoff_slope": -0.1,
         "attention_span_average": 200,
         "random_interaction_rate": 0.05,
         
         # Memory
         "max_sequence_length": 6,
-        "sequence_order_error_rate": 0.15,
         
         # Visual
         "visual_search_time_ms": 3000,
-        "left_right_confusion_rate": 0.10,
-        "pref_visual": 0.6,
         
         # Auditory
         "auditory_processing_accuracy": 0.85,
         "average_audio_replays": 1,
         "pref_auditory": 0.4,
         
-        # Speech
-        "speech_rate_wpm": 100,
-        "hesitation_frequency": 5,
-        
-        # Reading
-        "reading_speed_wpm": 80,
-        "reading_accuracy": 0.85,
-        "letter_reversal_rate": 0.08,
-        "audio_text_mismatch_rate": 0.05
+        # Motor Coordination
+        "hand_laterality_accuracy": 0.90,
+        "finger_counting_accuracy": 0.95,
+        "hand_position_accuracy": 0.88
     }
     
     response = requests.post(
@@ -145,15 +136,12 @@ def test_batch_prediction():
                 "response_accuracy_std": 0.10, "mean_response_time_ms": 2000,
                 "response_time_std_ms": 500, "task_completion_rate": 0.95,
                 "task_abandonment_count": 1, "instruction_follow_accuracy": 0.92,
-                "mean_focus_duration_sec": 200, "attention_dropoff_slope": -0.05,
-                "attention_span_average": 220, "random_interaction_rate": 0.03,
-                "max_sequence_length": 7, "sequence_order_error_rate": 0.10,
-                "visual_search_time_ms": 2500, "left_right_confusion_rate": 0.05,
-                "pref_visual": 0.6, "auditory_processing_accuracy": 0.90,
+                "mean_focus_duration_sec": 200, "attention_span_average": 220,
+                "random_interaction_rate": 0.03, "max_sequence_length": 7,
+                "visual_search_time_ms": 2500, "auditory_processing_accuracy": 0.90,
                 "average_audio_replays": 0, "pref_auditory": 0.4,
-                "speech_rate_wpm": 110, "hesitation_frequency": 3,
-                "reading_speed_wpm": 90, "reading_accuracy": 0.90,
-                "letter_reversal_rate": 0.05, "audio_text_mismatch_rate": 0.03
+                "hand_laterality_accuracy": 0.95, "finger_counting_accuracy": 0.98,
+                "hand_position_accuracy": 0.93
             },
             {
                 "age_months": 84, "primary_language": 0, "schooling_type": 3,
@@ -166,15 +154,12 @@ def test_batch_prediction():
                 "response_accuracy_std": 0.20, "mean_response_time_ms": 4000,
                 "response_time_std_ms": 1500, "task_completion_rate": 0.75,
                 "task_abandonment_count": 8, "instruction_follow_accuracy": 0.70,
-                "mean_focus_duration_sec": 100, "attention_dropoff_slope": -0.35,
-                "attention_span_average": 120, "random_interaction_rate": 0.25,
-                "max_sequence_length": 4, "sequence_order_error_rate": 0.40,
-                "visual_search_time_ms": 8000, "left_right_confusion_rate": 0.35,
-                "pref_visual": 0.4, "auditory_processing_accuracy": 0.65,
+                "mean_focus_duration_sec": 100, "attention_span_average": 120,
+                "random_interaction_rate": 0.25, "max_sequence_length": 4,
+                "visual_search_time_ms": 8000, "auditory_processing_accuracy": 0.65,
                 "average_audio_replays": 4, "pref_auditory": 0.6,
-                "speech_rate_wpm": 70, "hesitation_frequency": 20,
-                "reading_speed_wpm": 40, "reading_accuracy": 0.60,
-                "letter_reversal_rate": 0.35, "audio_text_mismatch_rate": 0.25
+                "hand_laterality_accuracy": 0.60, "finger_counting_accuracy": 0.70,
+                "hand_position_accuracy": 0.65
             }
         ]
     }
