@@ -3,7 +3,7 @@ import glob
 import pandas as pd
 from model import LDPredictor
 
-def load_training_data(data_folder='training_data'):
+def load_training_data(data_folder='training_dat'):
     print(f"Looking for data in folder: '{data_folder}'...")
     search_path = os.path.join(data_folder, "*.csv")
     all_files = glob.glob(search_path)
